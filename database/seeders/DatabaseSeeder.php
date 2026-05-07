@@ -13,11 +13,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $wallet = \App\Models\Wallet::factory()->create([
+            'user_id' => $user->id,
+            'balance' => 1250.75,
+        ]);
+
+        \App\Models\Transaction::factory(5)->create([
+            'wallet_id' => $wallet->id,
+            'type' => 'deposit',
+            'status' => 'completed',
+        ]);
+
+        \App\Models\Transaction::factory(3)->create([
+            'wallet_id' => $wallet->id,
+            'type' => 'withdraw',
+            'status' => 'completed',
         ]);
     }
 }
